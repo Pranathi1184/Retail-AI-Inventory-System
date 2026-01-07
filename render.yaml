@@ -1,8 +1,0 @@
-services:
-  - type: web
-    name: Retail-AI-Inventory-System
-    env: python
-    plan: free
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app
-    pythonVersion: 3.9.18
