@@ -1,4 +1,4 @@
-\# Retail AI Inventory Management System
+# Retail AI Inventory Management System
 
 
 
@@ -10,7 +10,7 @@ An end-to-end Flask + Machine Learning based system for intelligent retail inven
 
 
 
-\## Features
+## Features
 
 
 
@@ -32,7 +32,7 @@ An end-to-end Flask + Machine Learning based system for intelligent retail inven
 
 
 
-\## Project Structure
+## Project Structure
 
 
 
@@ -94,9 +94,9 @@ Retail-AI-Inventory-System/
 
 └── static/
 
-&nbsp;   ├── css/style.css
+     ├── css/style.css
 
-&nbsp;   └── js/script.js
+     └── js/script.js
 
 ```
 
@@ -106,11 +106,11 @@ Retail-AI-Inventory-System/
 
 
 
-\## Local Setup (Without Docker)
+## Local Setup (Without Docker)
 
 
 
-\### 1. Clone Repository
+### 1. Clone Repository
 
 
 
@@ -124,7 +124,7 @@ cd Retail-AI-Inventory-System
 
 
 
-\### 2. Create Virtual Environment
+### 2. Create Virtual Environment
 
 
 
@@ -160,7 +160,7 @@ source venv/bin/activate
 
 
 
-\### 3. Install Dependencies
+### 3. Install Dependencies
 
 
 
@@ -178,7 +178,7 @@ Recommended Python version: 3.9 or 3.10
 
 
 
-\### 4. Run Application
+### 4. Run Application
 
 
 
@@ -190,7 +190,7 @@ python app.py
 
 
 
-\### 5. Open in Browser
+### 5. Open in Browser
 
 
 
@@ -206,7 +206,7 @@ http://127.0.0.1:5000
 
 
 
-\## Bulk Prediction CSV Format
+## Bulk Prediction CSV Format
 
 
 
@@ -226,7 +226,7 @@ S002,P002,Grocery,79.99,300,75,0
 
 
 
-\## Docker Setup (Optional)
+## Docker Setup (Optional)
 
 
 
@@ -258,7 +258,7 @@ docker run -p 5000:5000 retail-ai
 
 
 
-\## Common Issues
+## Common Issues
 
 
 
@@ -274,7 +274,7 @@ docker run -p 5000:5000 retail-ai
 
 
 
-\## Author
+## Author
 
 
 
