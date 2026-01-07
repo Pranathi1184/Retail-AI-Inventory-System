@@ -39,66 +39,90 @@ An end-to-end Flask + Machine Learning based system for intelligent retail inven
 ```
 
 Retail-AI-Inventory-System/
-
 │
-
-├── app.py
-
-├── models.py
-
-├── requirements.txt
-
-├── Dockerfile
-
-├── bulk\_input\_sample.csv
-
+├── app.py                       # Main Flask application entry point
+├── models.py                    # SQLAlchemy models & ML interface
+├── requirements.txt             # Python dependencies
+├── setup.py                     # Project setup metadata
+├── Dockerfile                   # Docker configuration
+├── README.md                    # Project documentation
+├── bulk_input_sample.csv        # Sample CSV for bulk prediction
+├── .gitignore
+├── .gitattributes
 │
-
+├── BACKEND/                     # Machine Learning & Data Processing
+│   ├── TRAIN.py                 # Model training pipeline
+│   ├── TEST.py                  # Testing script
+│   ├── TEST1.PY
+│   ├── datagenerator.py         # Data generation & augmentation
+│   ├── create_dir.py            # Utility for directory creation
+│   ├── retail_store_inventory.csv
+│   ├── retail_store_inventory_augmented.csv
+│   ├── test_data.csv
+│   │
+│   ├── *.pkl                    # Trained ML models (Git LFS)
+│   ├── model_results.json       # Model evaluation metrics
+│   ├── analysis_*.json          # Saved analysis outputs
+│   │
+│   ├── catboost_info/           # CatBoost training artifacts
+│   │   ├── catboost_training.json
+│   │   ├── learn_error.tsv
+│   │   ├── time_left.tsv
+│   │   └── learn/
+│   │       └── events.out.tfevents
+│   │
+│   └── checkpoints/             # Deep learning checkpoints
+│       ├── epoch=3-step=3656.ckpt
+│       └── epoch=5-step=5484.ckpt
+│
+├── models/                      # Models used by Flask app
+│   ├── random_forest_model.pkl
+│   ├── xgboost_model.pkl
+│   ├── lightgbm_model.pkl
+│   ├── catboost_model.pkl
+│   └── preprocessing_objects.pkl
+│
 ├── instance/
-
-│   └── retail.db
-
+│   └── retail.db                # SQLite database (users, history)
 │
-
-├── models/
-
-│   ├── random\_forest\_model.pkl
-
-│   ├── xgboost\_model.pkl
-
-│   ├── lightgbm\_model.pkl
-
-│   ├── catboost\_model.pkl
-
-│   └── preprocessing\_objects.pkl
-
+├── static/
+│   ├── css/
+│   │   └── style.css
+│   ├── js/
+│   │   └── script.js
+│   └── images/
 │
-
-├── templates/
-
+├── templates/                   # Jinja2 HTML templates
 │   ├── base.html
-
-│   ├── dashboard.html
-
-│   ├── prediction.html
-
-│   ├── analysis.html
-
-│   ├── history.html
-
+│   ├── index.html
 │   ├── login.html
-
-│   └── register.html
-
+│   ├── register.html
+│   ├── dashboard.html
+│   ├── prediction_type.html
+│   ├── prediction.html
+│   ├── bulk_prediction.html
+│   ├── bulk_results.html
+│   ├── analysis.html
+│   └── history.html
 │
-
-└── static/
-
-     ├── css/style.css
-
-     └── js/script.js
+└── __pycache__/                 # Python cache files
 
 ```
+### BACKEND Folder
+Contains all machine learning–related code, datasets, trained models, 
+and experiment artifacts. This folder is used for training, evaluation, 
+and offline experimentation.
+
+### models Folder
+Contains the final trained models and preprocessing objects used directly 
+by the Flask web application during prediction.
+
+### instance Folder
+Holds the SQLite database (`retail.db`) used by Flask for authentication 
+and prediction history.
+
+### templates & static
+Frontend UI built using Jinja2 templates, Tailwind-style CSS, and JavaScript.
 
 
 
