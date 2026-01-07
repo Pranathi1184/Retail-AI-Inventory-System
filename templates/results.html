@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <div class="flex justify-between items-start">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800">Prediction Results</h1>
+                <p class="text-gray-600">AI-powered insights for your product</p>
+            </div>
+            <div class="text-right">
+                <div class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">
+                    Health Score: {{ report.overall_health_score }}/100
+                </div>
+                <p class="text-sm text-gray-500 mt-1">{{ report.product_info.analysis_timestamp }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Info -->
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-6">
+        <div class="bg-white rounded-lg shadow-md p-4 text-center">
+            <i class="fas fa-store text-blue-500 text-2xl mb-2"></i>
+            <h3 class="font-semibold">Store</h3>
+            <p class="text-gray-600">{{ report.product_info.store_id }}</p>
+        </div>
+        <div class="bg-white rounded-lg shadow-md p-4 text-center">
+            <i class="fas fa-barcode text-green-500 text-2xl mb-2"></i>
+            <h3 class="font-semibold">Product</h3>
+            <p class="text-gray-600">{{ report.product_info.product_id }}</p>
+        </div>
+        <div class="bg-white rounded-lg shadow-md p-4 text-center">
+            <i class="fas fa-tag text-purple-500 text-2xl mb-2"></i>
+            <h3 class="font-semibold">Category</h3>
+            <p class="text-gray-600">{{ report.product_info.category }}</p>
+        </div>
+        <div class="bg-white rounded-lg shadow-md p-4 text-center">
+            <i class="fas fa-globe text-orange-500 text-2xl mb-2"></i>
+            <h3 class="font-semibold">Region</h3>
+            <p class="text-gray-600">{{ report.product_info.region }}</p>
+        </div>
+    </div>
+
+    <!-- Main Insights Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <!-- Demand Forecast -->
+        <div class="lg:col-span-2 bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-semibold mb-4 flex items-center">
+                <i class="fas fa-chart-line text-blue-500 mr-2"></i>
+                Demand Forecast
+            </h2>
+            
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <p class="text-sm text-gray-600">Immediate Demand</p>
+                    <h3 class="text-2xl font-bold text-blue-600">{{ "%.0f"|format(report.demand_forecast.immediate_demand) }} units</h3>
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <p class="text-sm text-gray-600">30-Day Forecast</p>
+                    <h3 class="text-2xl font-bold text-green-600">{{ "%.0f"|format(report.demand_forecast.total_30day_forecast) }} units</h3>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <h4 class="font-semibold mb-2">Next 7 Days Forecast</h4>
+                <div class="space-y-2">
+                    {% for date, forecast in report.demand_forecast.daily_forecasts.items() %}
+                    {% if loop.index <= 7 %}
+                    <div class="flex justify-between items-center py-2 border-b">
+                        <span class="text-gray-600">{{ date }}</span>
+                        <span class="font-semibold">{{ "%.0f"|format(forecast) }} units</span>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Pricing Strategy -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-semibold mb-4 flex items-center">
+                <i class="fas fa-tags text-green-500 mr-2"></i>
+                Pricing Strategy
+            </h2>
+            
+            <div class="space-y-4">
+                <div class="flex justify-between items-center">
+                    <span>Current Price:</span>
+                    <span class="font-semibold">${{ "%.2f"|format(report.pricing_strategy.current_price) }}</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span>Recommended Price:</span>
+                    <span class="font-semibold text-green-600">${{ "%.2f"|format(report.pricing_strategy.recommended_price) }}</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span>Discount:</span>
+                    <span class="font-semibold">{{ "%.0f"|format(report.pricing_strategy.recommended_discount) }}%</span>
+                </div>
+                
+                <div class="bg-gray-50 p-3 rounded-lg mt-4">
+                    <p class="text-sm font-semibold text-gray-700">Strategy</p>
+                    <p class="text-sm text-gray-600">{{ report.pricing_strategy.pricing_strategy }}</p>
+                </div>
+
+                <div class="bg-blue-50 p-3 rounded-lg">
+                    <p class="text-sm font-semibold text-blue-700">Expected Impact</p>
+                    <p class="text-sm text-blue-600">Revenue Change: {{ report.pricing_strategy.expected_impact.expected_revenue_change }}%</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inventory Management -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-semibold mb-4 flex items-center">
+                <i class="fas fa-boxes text-orange-500 mr-2"></i>
+                Inventory Management
+            </h2>
+            
+            <div class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-orange-50 p-3 rounded-lg">
+                        <p class="text-sm text-gray-600">Current Inventory</p>
+                        <h3 class="text-xl font-bold text-orange-600">{{ report.inventory_management.current_inventory }} units</h3>
+                    </div>
+                    <div class="bg-purple-50 p-3 rounded-lg">
+                        <p class="text-sm text-gray-600">Days of Supply</p>
+                        <h3 class="text-xl font-bold text-purple-600">{{ report.inventory_management.days_of_supply }} days</h3>
+                    </div>
+                </div>
+
+                <div class="bg-{{ 'red' if report.inventory_management.reorder_urgency == 'HIGH' else 'orange' if report.inventory_management.reorder_urgency == 'MEDIUM' else 'green' }}-50 p-4 rounded-lg">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="font-semibold text-{{ 'red' if report.inventory_management.reorder_urgency == 'HIGH' else 'orange' if report.inventory_management.reorder_urgency == 'MEDIUM' else 'green' }}-700">
+                                {{ report.inventory_management.reorder_urgency }} Priority
+                            </p>
+                            <p class="text-sm text-{{ 'red' if report.inventory_management.reorder_urgency == 'HIGH' else 'orange' if report.inventory_management.reorder_urgency == 'MEDIUM' else 'green' }}-600">
+                                {{ report.inventory_management.reorder_action }}
+                            </p>
+                        </div>
+                        <i class="fas fa-{{ 'exclamation-triangle' if report.inventory_management.reorder_urgency == 'HIGH' else 'info-circle' if report.inventory_management.reorder_urgency == 'MEDIUM' else 'check-circle' }} text-{{ 'red' if report.inventory_management.reorder_urgency == 'HIGH' else 'orange' if report.inventory_management.reorder_urgency == 'MEDIUM' else 'green' }}-500 text-2xl"></i>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 p-3 rounded-lg">
+                    <p class="text-sm font-semibold">Recommended Order Quantity</p>
+                    <p class="text-lg font-bold text-gray-800">{{ "%.0f"|format(report.inventory_management.recommended_order_quantity) }} units</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Business Alerts -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-semibold mb-4 flex items-center">
+                <i class="fas fa-bell text-red-500 mr-2"></i>
+                Business Alerts
+            </h2>
+            
+            <div class="space-y-3">
+                {% for alert in report.business_alerts %}
+                <div class="border-l-4 
+                            {% if alert.severity == 'HIGH' %}border-red-500 bg-red-50
+                            {% elif alert.severity == 'MEDIUM' %}border-orange-500 bg-orange-50
+                            {% else %}border-yellow-500 bg-yellow-50{% endif %} 
+                            p-3 rounded">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h4 class="font-semibold">{{ alert.type }}</h4>
+                            <p class="text-sm mt-1">{{ alert.message }}</p>
+                            <p class="text-xs text-gray-600 mt-2">{{ alert.details }}</p>
+                        </div>
+                        <span class="text-xs 
+                                    {% if alert.severity == 'HIGH' %}text-red-600
+                                    {% elif alert.severity == 'MEDIUM' %}text-orange-600
+                                    {% else %}text-yellow-600{% endif %} 
+                                    font-semibold">
+                            {{ alert.severity }}
+                        </span>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-2">{{ alert.action }}</p>
+                </div>
+                {% else %}
+                <div class="text-center py-4 text-gray-500">
+                    <i class="fas fa-check-circle text-green-500 text-2xl mb-2"></i>
+                    <p>No critical alerts at this time</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-xl font-semibold mb-4">Recommended Actions</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <a href="{{ url_for('prediction') }}" class="bg-blue-500 text-white py-3 px-4 rounded text-center hover:bg-blue-600 transition">
+                <i class="fas fa-plus mr-2"></i>New Prediction
+            </a>
+            <a href="{{ url_for('dashboard') }}" class="bg-gray-500 text-white py-3 px-4 rounded text-center hover:bg-gray-600 transition">
+                <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+            </a>
+            <button onclick="window.print()" class="bg-green-500 text-white py-3 px-4 rounded hover:bg-green-600 transition">
+                <i class="fas fa-print mr-2"></i>Print Report
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}

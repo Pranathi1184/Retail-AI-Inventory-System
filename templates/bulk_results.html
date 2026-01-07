@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="max-w-7xl mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold">Bulk Prediction Results</h1>
+        <a href="{{ url_for('dashboard') }}"
+           class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+            Back to Dashboard
+        </a>
+    </div>
+
+    <div class="bg-white shadow rounded-lg overflow-x-auto">
+        <table class="min-w-full text-sm">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="px-4 py-2 text-left">Store</th>
+                    <th class="px-4 py-2 text-left">Product</th>
+                    <th class="px-4 py-2 text-left">Category</th>
+                    <th class="px-4 py-2 text-right">Demand</th>
+                    <th class="px-4 py-2 text-right">Reorder Qty</th>
+                    <th class="px-4 py-2 text-right">Price</th>
+                    <th class="px-4 py-2 text-right">Health</th>
+                    <th class="px-4 py-2 text-right">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in results %}
+                <tr class="border-t hover:bg-gray-50">
+                    <td class="px-4 py-2">{{ r.store_id }}</td>
+                    <td class="px-4 py-2 font-semibold">{{ r.product_id }}</td>
+                    <td class="px-4 py-2">{{ r.category }}</td>
+                    <td class="px-4 py-2 text-right">{{ r.predicted_demand }}</td>
+                    <td class="px-4 py-2 text-right">{{ r.reorder_qty }}</td>
+                    <td class="px-4 py-2 text-right">₹{{ r.recommended_price }}</td>
+                    <td class="px-4 py-2 text-right font-semibold">{{ r.health_score }}</td>
+                    <td class="px-4 py-2 text-right">
+                        <a href="{{ url_for('analysis', prediction_id=r.id) }}"
+                           class="text-blue-600 hover:underline">
+                            View Details
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
+

@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Welcome Section -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-800">Welcome back, {{ session.username }}! 👋</h1>
+        <p class="text-gray-600">Here's your retail intelligence dashboard</p>
+    </div>
+
+    <!-- Analytics Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-blue-500">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-600">Total Predictions</p>
+                    <h3 class="text-2xl font-bold">{{ analytics.total_predictions }}</h3>
+                </div>
+                <i class="fas fa-chart-bar text-blue-500 text-2xl"></i>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-500">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-600">Active Alerts</p>
+                    <h3 class="text-2xl font-bold">{{ analytics.active_alerts }}</h3>
+                </div>
+                <i class="fas fa-bell text-green-500 text-2xl"></i>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-purple-500">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-600">High Demand Products</p>
+                    <h3 class="text-2xl font-bold">{{ analytics.high_demand_products }}</h3>
+                </div>
+                <i class="fas fa-fire text-purple-500 text-2xl"></i>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-orange-500">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-600">Reorder Recommendations</p>
+                    <h3 class="text-2xl font-bold">{{ analytics.reorder_recommendations }}</h3>
+                </div>
+                <i class="fas fa-shipping-fast text-orange-500 text-2xl"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Recent Predictions -->
+        <div class="lg:col-span-2">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-semibold">Recent Predictions</h2>
+                    <a href="{{ url_for('prediction_type') }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
+                        New Prediction
+                    </a>
+                </div>
+                
+                <div class="space-y-4">
+                    {% for prediction in recent_predictions %}
+                    <div class="border rounded-lg p-4 hover:bg-gray-50 transition">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="font-semibold">{{ prediction.product_id }} - {{ prediction.store_id }}</h3>
+                                <p class="text-sm text-gray-600">{{ prediction.category }}</p>
+                                <div class="flex space-x-4 mt-2 text-sm">
+                                    <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                                        Demand: {{ "%.0f"|format(prediction.demand_forecast) }}
+                                    </span>
+                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded">
+                                        Price: ${{ "%.2f"|format(prediction.recommended_price) }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm text-gray-500">{{ prediction.created_at.strftime('%Y-%m-%d') }}</p>
+                                <a href="{{ url_for('analysis', prediction_id=prediction.id) }}" 
+                                   class="text-blue-500 hover:text-blue-700 text-sm">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <p class="text-gray-500 text-center py-4">No predictions yet. <a href="{{ url_for('prediction_type') }}" class="text-blue-500">Create your first prediction!</a></p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Alerts and Quick Actions -->
+        <div class="space-y-6">
+            <!-- Active Alerts -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-semibold mb-4">Active Alerts</h2>
+                
+                <div class="space-y-3">
+                    {% for alert in active_alerts %}
+                    <div class="border-l-4 
+                                {% if alert.severity == 'HIGH' %}border-red-500 bg-red-50
+                                {% elif alert.severity == 'MEDIUM' %}border-orange-500 bg-orange-50
+                                {% else %}border-yellow-500 bg-yellow-50{% endif %} 
+                                p-3 rounded">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="font-semibold">{{ alert.product_id }}</h4>
+                                <p class="text-sm">{{ alert.message }}</p>
+                                <p class="text-xs text-gray-600 mt-1">{{ alert.details[:60] }}...</p>
+                            </div>
+                            <span class="text-xs 
+                                        {% if alert.severity == 'HIGH' %}text-red-600
+                                        {% elif alert.severity == 'MEDIUM' %}text-orange-600
+                                        {% else %}text-yellow-600{% endif %} 
+                                        font-semibold">
+                                {{ alert.severity }}
+                            </span>
+                        </div>
+                    </div>
+                    {% else %}
+                    <p class="text-gray-500 text-center py-4">No active alerts 🎉</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-semibold mb-4">Quick Actions</h2>
+                
+                <div class="space-y-3">
+                    <a href="{{ url_for('prediction_type') }}" class="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition flex items-center justify-center space-x-2">
+                        <i class="fas fa-plus"></i>
+                        <span>New Prediction</span>
+                    </a>
+                    
+                    <a href="{{ url_for('history') }}" class="w-full bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 transition flex items-center justify-center space-x-2">
+                        <i class="fas fa-history"></i>
+                        <span>View History</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

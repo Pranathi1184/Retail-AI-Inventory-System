@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="bg-gradient-to-r from-blue-600 to-purple-700 text-white py-20">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+        <h1 class="text-5xl font-bold mb-6">Intelligent Retail Inventory Management</h1>
+        <p class="text-xl mb-8 max-w-3xl mx-auto">
+            Leverage AI-powered predictions to optimize your inventory, pricing, and demand forecasting. 
+            Make data-driven decisions that boost profitability and reduce waste.
+        </p>
+        <div class="space-x-4">
+            {% if session.user_id %}
+            <a href="{{ url_for('dashboard') }}" class="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
+                Go to Dashboard
+            </a>
+            {% else %}
+            <a href="{{ url_for('register') }}" class="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
+                Get Started Free
+            </a>
+            <a href="{{ url_for('login') }}" class="border border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition">
+                Sign In
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-12">Powerful Features for Retail Excellence</h2>
+        
+        <div class="grid md:grid-cols-3 gap-8">
+            <!-- Feature 1 -->
+            <div class="text-center p-6">
+                <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-chart-line text-blue-600 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-3">Demand Forecasting</h3>
+                <p class="text-gray-600">Accurate predictions using advanced machine learning models including LSTM, Random Forest, and XGBoost.</p>
+            </div>
+            
+            <!-- Feature 2 -->
+            <div class="text-center p-6">
+                <div class="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-tags text-green-600 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-3">Dynamic Pricing</h3>
+                <p class="text-gray-600">Optimize pricing strategies based on demand patterns, competition, and market conditions.</p>
+            </div>
+            
+            <!-- Feature 3 -->
+            <div class="text-center p-6">
+                <div class="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-boxes text-purple-600 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-3">Inventory Optimization</h3>
+                <p class="text-gray-600">Smart reorder recommendations to prevent stockouts and reduce overstock situations.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-12">How It Works</h2>
+        
+        <div class="grid md:grid-cols-4 gap-6">
+            <div class="text-center">
+                <div class="bg-blue-500 text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 font-bold">1</div>
+                <h3 class="font-semibold mb-2">Input Product Data</h3>
+                <p class="text-sm text-gray-600">Enter product details, sales history, and market conditions</p>
+            </div>
+            
+            <div class="text-center">
+                <div class="bg-blue-500 text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 font-bold">2</div>
+                <h3 class="font-semibold mb-2">AI Analysis</h3>
+                <p class="text-sm text-gray-600">Our models analyze data and generate predictions</p>
+            </div>
+            
+            <div class="text-center">
+                <div class="bg-blue-500 text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 font-bold">3</div>
+                <h3 class="font-semibold mb-2">Get Insights</h3>
+                <p class="text-sm text-gray-600">Receive actionable recommendations and forecasts</p>
+            </div>
+            
+            <div class="text-center">
+                <div class="bg-blue-500 text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 font-bold">4</div>
+                <h3 class="font-semibold mb-2">Take Action</h3>
+                <p class="text-sm text-gray-600">Implement recommendations and track results</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

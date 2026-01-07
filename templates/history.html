@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <div class="flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800">Prediction History</h1>
+                <p class="text-gray-600">View all your previous analyses and predictions</p>
+            </div>
+            <a href="{{ url_for('prediction') }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
+                <i class="fas fa-plus mr-2"></i>New Prediction
+            </a>
+        </div>
+    </div>
+
+    <!-- Statistics -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+        <div class="bg-white rounded-lg shadow-md p-4 text-center">
+            <div class="text-2xl font-bold text-blue-600">{{ predictions.total }}</div>
+            <div class="text-sm text-gray-600">Total Predictions</div>
+        </div>
+        <div class="bg-white rounded-lg shadow-md p-4 text-center">
+            <div class="text-2xl font-bold text-green-600">
+                {{ predictions.items|selectattr("demand_forecast", ">", 100)|list|length }}
+            </div>
+            <div class="text-sm text-gray-600">High Demand Items</div>
+        </div>
+        <div class="bg-white rounded-lg shadow-md p-4 text-center">
+            <div class="text-2xl font-bold text-orange-600">
+                {{ predictions.items|selectattr("reorder_quantity", ">", 0)|list|length }}
+            </div>
+            <div class="text-sm text-gray-600">Reorder Recommendations</div>
+        </div>
+        <div class="bg-white rounded-lg shadow-md p-4 text-center">
+            <div class="text-2xl font-bold text-purple-600">
+                {{ (predictions.items|selectattr("created_at")|list|sort(attribute='created_at')|last).created_at.strftime('%m/%d') if predictions.items else 'N/A' }}
+            </div>
+            <div class="text-sm text-gray-600">Last Analysis</div>
+        </div>
+    </div>
+
+    <!-- Predictions Table -->
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Product & Store
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Category
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Demand Forecast
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Recommended Price
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Reorder Qty
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Date
+                        </th>
+                        
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% for prediction in predictions.items %}
+                    <tr class="hover:bg-gray-50 transition">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="ml-4">
+                                    <div class="text-sm font-medium text-gray-900">
+                                        {{ prediction.product_id }}
+                                    </div>
+                                    <div class="text-sm text-gray-500">
+                                        {{ prediction.store_id }}
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                        {% if prediction.category == 'Electronics' %}bg-blue-100 text-blue-800
+                                        {% elif prediction.category == 'Clothing' %}bg-purple-100 text-purple-800
+                                        {% elif prediction.category == 'Groceries' %}bg-green-100 text-green-800
+                                        {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                {{ prediction.category }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">{{ "%.0f"|format(prediction.demand_forecast) }}</div>
+                            <div class="text-sm text-gray-500">units/day</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-900">${{ "%.2f"|format(prediction.recommended_price) }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            {% if prediction.reorder_quantity > 0 %}
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-orange-100 text-orange-800">
+                                {{ "%.0f"|format(prediction.reorder_quantity) }}
+                            </span>
+                            {% else %}
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                                None
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {{ prediction.created_at.strftime('%Y-%m-%d') }}
+                        </td>
+                        
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="7" class="px-6 py-4 text-center text-gray-500">
+                            <div class="py-8">
+                                <i class="fas fa-chart-bar text-gray-400 text-4xl mb-4"></i>
+                                <p class="text-lg font-semibold text-gray-600">No predictions yet</p>
+                                <p class="text-gray-500 mb-4">Start by creating your first prediction</p>
+                                <a href="{{ url_for('prediction') }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
+                                    Create First Prediction
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        {% if predictions.pages > 1 %}
+        <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+            <div class="flex-1 flex justify-between items-center">
+                <div>
+                    <p class="text-sm text-gray-700">
+                        Showing
+                        <span class="font-medium">{{ predictions.page * predictions.per_page - predictions.per_page + 1 }}</span>
+                        to
+                        <span class="font-medium">{{ predictions.page * predictions.per_page if predictions.page * predictions.per_page <= predictions.total else predictions.total }}</span>
+                        of
+                        <span class="font-medium">{{ predictions.total }}</span>
+                        results
+                    </p>
+                </div>
+                <div class="flex space-x-2">
+                    {% if predictions.has_prev %}
+                    <a href="{{ url_for('history', page=predictions.prev_num) }}" 
+                       class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                        Previous
+                    </a>
+                    {% endif %}
+                    
+                    {% if predictions.has_next %}
+                    <a href="{{ url_for('history', page=predictions.next_num) }}" 
+                       class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                        Next
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Export Options -->
+    <div class="mt-6 bg-white rounded-lg shadow-md p-6">
+        <h3 class="text-lg font-semibold mb-4">Export Data</h3>
+        <div class="flex space-x-4">
+            <button onclick="exportData('json')" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition">
+                <i class="fas fa-file-code mr-2"></i>Export as JSON
+            </button>
+            <button onclick="exportData('csv')" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition">
+                <i class="fas fa-file-csv mr-2"></i>Export as CSV
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+function exportData(format) {
+    // This would typically make an API call to export the data
+    alert(`Exporting data as ${format.toUpperCase()}...`);
+    // In a real implementation, this would download a file
+}
+</script>
+{% endblock %}

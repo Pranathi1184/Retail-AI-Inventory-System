@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RetailAI - Intelligent Inventory Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-blue-600 text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-chart-line text-2xl"></i>
+                    <span class="text-xl font-bold">RetailAI</span>
+                </div>
+                
+                {% if session.user_id %}
+                <div class="flex items-center space-x-6">
+                    <a href="{{ url_for('dashboard') }}" class="hover:text-blue-200 transition">Dashboard</a>
+                    <a href="{{ url_for('prediction_type') }}" class="hover:text-blue-200 transition">Predict</a>
+                    <a href="{{ url_for('history') }}" class="hover:text-blue-200 transition">History</a>
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-user"></i>
+                        <span>{{ session.username }}</span>
+                    </div>
+                    <a href="{{ url_for('logout') }}" class="bg-blue-700 px-4 py-2 rounded hover:bg-blue-800 transition">Logout</a>
+                </div>
+                {% else %}
+                <div class="space-x-4">
+                    <a href="{{ url_for('login') }}" class="hover:text-blue-200 transition">Login</a>
+                    <a href="{{ url_for('register') }}" class="bg-blue-700 px-4 py-2 rounded hover:bg-blue-800 transition">Register</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="max-w-7xl mx-auto px-4 mt-4">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} p-4 rounded-lg mb-4 
+                                {% if category == 'error' %}bg-red-100 text-red-700 border border-red-300
+                                {% else %}bg-green-100 text-green-700 border border-green-300{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p>&copy; 2024 RetailAI. Intelligent Inventory Management System.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

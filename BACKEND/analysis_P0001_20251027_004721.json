@@ -1,0 +1,83 @@
+{
+  "product_info": {
+    "store_id": "S001",
+    "product_id": "P0001",
+    "category": "Groceries",
+    "region": "South",
+    "analysis_timestamp": "2025-10-27 00:47:21"
+  },
+  "demand_forecast": {
+    "immediate_demand": 74.63745732424394,
+    "daily_forecasts": {
+      "2025-10-27": 80.92,
+      "2025-10-28": 87.3,
+      "2025-10-29": 90.89,
+      "2025-10-30": 88.29,
+      "2025-10-31": 91.54,
+      "2025-11-01": 74.58,
+      "2025-11-02": 83.46,
+      "2025-11-03": 78.0,
+      "2025-11-04": 87.72,
+      "2025-11-05": 111.11,
+      "2025-11-06": 105.36,
+      "2025-11-07": 88.9,
+      "2025-11-08": 82.75,
+      "2025-11-09": 71.84,
+      "2025-11-10": 98.82,
+      "2025-11-11": 78.17,
+      "2025-11-12": 99.55,
+      "2025-11-13": 96.17,
+      "2025-11-14": 91.88,
+      "2025-11-15": 92.39,
+      "2025-11-16": 85.41,
+      "2025-11-17": 90.54,
+      "2025-11-18": 92.84,
+      "2025-11-19": 95.78,
+      "2025-11-20": 113.6,
+      "2025-11-21": 105.7,
+      "2025-11-22": 88.43,
+      "2025-11-23": 87.18,
+      "2025-11-24": 99.29,
+      "2025-11-25": 104.15
+    },
+    "total_30day_forecast": 2742.56,
+    "confidence_score": 0.9941444982129936
+  },
+  "pricing_strategy": {
+    "current_price": 200.0,
+    "current_discount": 20.0,
+    "competitor_price": 180.0,
+    "demand_level": 74.63745732424394,
+    "recommended_price": 160.0,
+    "recommended_discount": 20.0,
+    "pricing_strategy": "COMPETITIVE_PRICING_WITH_PRICE_MATCH",
+    "reasoning": "Moderate demand (75 units). Maintain competitive positioning. Consider matching competitor prices.",
+    "expected_impact": {
+      "expected_volume_change": 30.0,
+      "expected_revenue_change": 4.0,
+      "old_revenue": 14927.49,
+      "new_revenue": 15524.59
+    }
+  },
+  "inventory_management": {
+    "current_inventory": 120.0,
+    "days_of_supply": 1.6,
+    "reorder_point": 821.0,
+    "lead_time_demand": 597.0,
+    "recommended_order_quantity": 233.0,
+    "reorder_urgency": "HIGH",
+    "reorder_action": "IMMEDIATE_REORDER",
+    "reasoning": "Current inventory (120.0) below reorder point (821)",
+    "stockout_risk": "High risk - Stockout expected around 2025-10-28"
+  },
+  "business_alerts": [
+    {
+      "type": "STOCKOUT_RISK",
+      "severity": "HIGH",
+      "message": "\ud83d\udea8 IMMEDIATE REORDER NEEDED for P0001",
+      "details": "Current inventory (120.0) below reorder point (821)",
+      "action": "Order 233.0 units immediately"
+    }
+  ],
+  "overall_health_score": 100
+}
