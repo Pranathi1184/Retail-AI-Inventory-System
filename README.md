@@ -348,9 +348,9 @@ docker run -p 5000:5000 retail-ai
 
 ## 👩‍💻 Author
 
-\Pranathi Doddamani
-\Final Year Engineering Student
-\GitHub: https://github.com/Pranathi1184
+\ Pranathi Doddamani
+\ Final Year Engineering Student
+\ GitHub: https://github.com/Pranathi1184
 
 ## 📄 License
 
