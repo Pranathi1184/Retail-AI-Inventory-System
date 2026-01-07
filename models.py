@@ -426,6 +426,27 @@ class AdvancedRetailPredictor:
             
             # Generate 30-day forecast
             daily_forecasts = self.generate_dummy_forecast(immediate_demand)
+            forecast_list = []
+            previous_value = None
+
+            for date, value in daily_forecasts.items():
+                if previous_value is None:
+                    trend = "Stable"
+                elif value > previous_value:
+                    trend = "Up"
+                elif value < previous_value:
+                    trend = "Down"
+                else:
+                    trend = "Stable"
+
+                forecast_list.append({
+                    "date": date,
+                    "demand": round(value, 2),
+                    "trend": trend
+                })
+
+                previous_value = value
+
             total_30day_forecast = sum(daily_forecasts.values())
             
             # Optimize pricing
@@ -455,7 +476,7 @@ class AdvancedRetailPredictor:
                     'immediate_demand': round(immediate_demand, 2),
                     'total_30day_forecast': round(total_30day_forecast, 2),
                     'confidence_score': 0.85,
-                    'daily_forecasts': daily_forecasts
+                    'daily_forecasts': forecast_list
                 },
                 'pricing_strategy': pricing_strategy,
                 'inventory_management': reorder_recommendation,

@@ -454,7 +454,7 @@ def analysis(prediction_id):
         })
 
 
-    return render_template('analysis.html', report=report, prediction_id=prediction_id)
+    return render_template('analysis.html', report=report, prediction_id=prediction_id, enhanced_forecasts=enhanced_forecasts)
 
 @app.route('/api/demand_forecast', methods=['POST'])
 def api_demand_forecast():
