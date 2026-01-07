@@ -344,21 +344,13 @@ docker run -p 5000:5000 retail-ai
 - Adaptive pricing strategies based on demand conditions
 - Bulk prediction feature significantly reduces manual effort
 - Effective performance on retail-like datasets
-
-## 🎓 Academic Relevance
-
-Suitable for:
-
-- Final year engineering project
-- Machine learning demonstrations
-- Flask full-stack showcase
-- Viva and interview presentations
+  
 
 ## 👩‍💻 Author
 
-Pranathi Doddamani
-Final Year Engineering Student
-GitHub: https://github.com/Pranathi1184
+\Pranathi Doddamani
+\Final Year Engineering Student
+\GitHub: https://github.com/Pranathi1184
 
 ## 📄 License
 
