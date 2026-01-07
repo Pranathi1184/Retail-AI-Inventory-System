@@ -1,33 +1,79 @@
-# Retail AI Inventory Management System
+# 🛒 Retail AI – Intelligent Inventory Management System
 
+## 📌 Project Overview
 
+Retail AI – Intelligent Inventory Management System is a full-stack Machine Learning–powered web application developed as a final year engineering project.
+The system helps retail businesses predict demand, optimize pricing, manage inventory, and generate actionable business alerts using historical sales data and trained ML models.
 
-An end-to-end Flask + Machine Learning based system for intelligent retail inventory management.
+The project integrates:
 
+- Multiple ML models (Random Forest, XGBoost, LightGBM, CatBoost)
+- Flask web framework
+- SQLite database
+- CSV-based bulk predictions
+- Interactive dashboard and analysis pages
 
+## 🎯 Objectives
 
----
+- Forecast short-term and 30-day product demand
+- Recommend optimal pricing strategies
+- Suggest reorder quantities and inventory actions
+- Provide business alerts and health scores
+- Support single and bulk (CSV) predictions
+- Maintain prediction history for analysis
 
+## 🧠 System Architecture
 
+### Flow
 
-## Features
+- User inputs product/store details (single or CSV)
+- Data validation and preprocessing
+- Machine learning demand prediction
+- Pricing optimization
+- Inventory recommendation
+- Business alerts generation
+- Results stored in database
+- Visualized on dashboard and analysis pages
 
+## 🧪 Machine Learning Models Used
 
+- Random Forest Regressor
+- XGBoost Regressor
+- LightGBM Regressor
+- CatBoost Regressor
 
-\- Demand Forecasting (30-day)
+An ensemble-based strategy is used to improve prediction stability.
+Models are trained offline and stored as .pkl files (tracked using Git LFS).
 
-\- Pricing Optimization
+## 📊 Key Features
 
-\- Inventory Reorder Recommendation
+### 🔹 Single Prediction
 
-\- Business Alerts
+- Demand forecast
+- Pricing recommendation
+- Inventory reorder quantity
+- Business alerts
+- Health score
 
-\- Single \& Bulk Predictions
+### 🔹 Bulk Prediction (CSV Upload)
 
-\- Analysis Page \& History
+- Upload multiple products at once
+- Batch demand forecasting
+- Bulk reorder recommendations
+- Results displayed in table format
 
+### 🔹 Analysis Page
 
+- 30-day demand forecast
+- Trend analysis
+- Pricing impact
+- Inventory status
+- Action plan
 
+### 🔹 History
+
+- Stores all past predictions
+- Allows detailed review anytime
 ---
 
 
@@ -281,40 +327,41 @@ docker run -p 5000:5000 retail-ai
 ---
 
 
-
 ## Common Issues
 
-
-
 \- Python 3.13 build errors → Use Python 3.9 / 3.10
-
-\- Daily forecast not showing → Pass enhanced\_forecasts to analysis.html
 
 \- Large .pkl files → Handled using Git LFS
 
 
-
 ---
 
 
+## 📈 Results and Observations
 
-## Author
+- Improved demand forecasting accuracy using ensemble models
+- Reduced inventory stockouts through reorder recommendations
+- Adaptive pricing strategies based on demand conditions
+- Bulk prediction feature significantly reduces manual effort
+- Effective performance on retail-like datasets
 
+## 🎓 Academic Relevance
 
+Suitable for:
 
-Pranathi Doddamani  
+- Final year engineering project
+- Machine learning demonstrations
+- Flask full-stack showcase
+- Viva and interview presentations
 
-Final Year Engineering Student  
+## 👩‍💻 Author
 
+Pranathi Doddamani
+Final Year Engineering Student
 GitHub: https://github.com/Pranathi1184
 
+## 📄 License
 
-
----
-
-
-
-Academic and educational use only.
-
+This project is intended for academic and educational use only.
 
 
