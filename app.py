@@ -451,33 +451,48 @@ def results():
 def analysis(prediction_id):
     if 'user_id' not in session:
         return redirect(url_for('login'))
-    
+
     prediction_record = PredictionHistory.query.filter_by(
         id=prediction_id,
         user_id=session['user_id']
     ).first_or_404()
-    
+
     report = json.loads(prediction_record.prediction_result)
 
     daily_forecasts = report["demand_forecast"]["daily_forecasts"]
-    forecast_items = list(daily_forecasts.items())
-
     enhanced_forecasts = []
-    for i, (date, value) in enumerate(forecast_items):
-        prev_value = forecast_items[i - 1][1] if i > 0 else value
-        trend = value - prev_value
-        percent_change = ((value - prev_value) / prev_value * 100) if prev_value > 0 else 0
 
+    # ✅ CASE 1: dict → normalize
+    if isinstance(daily_forecasts, dict):
+        prev = None
+        for date, value in daily_forecasts.items():
+            trend = (
+                "Up" if prev is not None and value > prev else
+                "Down" if prev is not None and value < prev else
+                "Stable"
+            )
 
-        enhanced_forecasts.append({
-            "date": date,
-            "value": value,
-            "trend": trend,
-            "percent_change": percent_change
-        })
+            enhanced_forecasts.append({
+                "date": date,
+                "demand": value,
+                "trend": trend
+            })
+            prev = value
 
+    # ✅ CASE 2: already a list → use directly
+    elif isinstance(daily_forecasts, list):
+        enhanced_forecasts = daily_forecasts
 
-    return render_template('analysis.html', report=report, prediction_id=prediction_id, enhanced_forecasts=enhanced_forecasts)
+    else:
+        enhanced_forecasts = []
+
+    return render_template(
+        'analysis.html',
+        report=report,
+        enhanced_forecasts=enhanced_forecasts,
+        prediction_id=prediction_id
+    )
+
 
 @app.route('/api/demand_forecast', methods=['POST'])
 def api_demand_forecast():

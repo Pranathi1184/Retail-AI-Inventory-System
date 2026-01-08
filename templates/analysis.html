@@ -95,24 +95,22 @@
     <td class="px-4 py-2">{{ f.date }}</td>
 
     <td class="px-4 py-2 text-right font-semibold">
-        {{ "%.0f"|format(f.value) }} units
+        {{ "%.0f"|format(f.demand) }} units
     </td>
 
     <td class="px-4 py-2 text-right">
-        {% if f.trend > 0 %}
-            <span class="text-green-600">▲</span>
-        {% elif f.trend < 0 %}
-            <span class="text-red-600">▼</span>
+        {% if f.trend == "Up" %}
+            <span class="text-green-600">▲ Up</span>
+        {% elif f.trend == "Down" %}
+            <span class="text-red-600">▼ Down</span>
         {% else %}
-            <span class="text-gray-500">—</span>
+            <span class="text-gray-500">— Stable</span>
         {% endif %}
-        <span class="ml-2 text-sm text-gray-600">
-            ({{ f.percent_change | round(2) }}%)
-        </span>
     </td>
 </tr>
 {% endfor %}
 </tbody>
+
          </table>
             </div>
         </div>
