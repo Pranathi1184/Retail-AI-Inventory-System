@@ -17,20 +17,20 @@ The project integrates:
 
 The application is deployed on cloud platforms for demonstration, evaluation, and academic review.
 
-\- \*\*Live Application (Render):\*\*  
+\- **Live Application (Render):**  
   👉 https://retail-ai-inventory-system.onrender.com
 
-\- \*\*Alternative Deployment (Railway):\*\*  
+\- **Alternative Deployment (Railway):**  
   👉 https://retail-ai-inventory-system.up.railway.app
 
-\> ⚠️ Note: Free-tier deployments may take a few seconds to wake up on first load.
+> ⚠️ Note: Free-tier deployments may take a few seconds to wake up on first load.
 
-\#\# Demo Login Credentials
+## Demo Login Credentials
 
 \- Username: demo  
 \- Password: demo123
 
-\- Live deployment validates real-time prediction, bulk CSV processing, and database persistence.
+- Live deployment validates real-time prediction, bulk CSV processing, and database persistence.
 
 
 ## 🎯 Objectives
