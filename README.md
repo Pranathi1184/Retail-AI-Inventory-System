@@ -21,7 +21,7 @@ The application is deployed on cloud platforms for demonstration, evaluation, an
   👉 https://retail-ai-inventory-system.onrender.com
 
 \- **Alternative Deployment (Railway):**  
-  👉 https://retail-ai-inventory-system.up.railway.app
+  👉 [https://retail-ai-inventory-system-production.up.railway.app/](https://retail-ai-inventory-system-production.up.railway.app/)
 
 > ⚠️ Note: Free-tier deployments may take a few seconds to wake up on first load.
 
