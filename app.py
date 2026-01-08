@@ -604,10 +604,15 @@ def bulk_prediction():
             "price": "Price",
             "inventory_level": "Inventory Level",
             "units_sold": "Units Sold",
+            "units_ordered": "Units Ordered",
             "discount": "Discount",
             "competitor_price": "Competitor Pricing",
-            "promotion": "Holiday/Promotion"
+            "promotion": "Holiday/Promotion",
+            "season": "Season",
+            "weather": "Weather",
+            "region": "Region"
         }
+
 
         results = []
 
@@ -619,8 +624,16 @@ def bulk_prediction():
             for csv_col, internal_col in COLUMN_MAPPING.items():
                 mapped_input[internal_col] = raw.get(csv_col)
 
-            # Run full analysis
-            report = predictor.comprehensive_analysis(mapped_input)
+            # ✅ FIX: Provide safe defaults for missing inputs
+            mapped_input.setdefault("Units Sold", mapped_input.get("Inventory Level", 0) * 0.2)
+            mapped_input.setdefault("Discount", 0)
+            mapped_input.setdefault("Holiday/Promotion", mapped_input.get("Holiday/Promotion", 0))
+            mapped_input.setdefault("Season", raw.get("season", "Normal"))
+
+            
+            normalized_input = predictor.normalize_bulk_input(mapped_input)
+            report = predictor.comprehensive_analysis(normalized_input)
+
 
             # 🔥 SAVE TO DATABASE (THIS IS THE KEY FIX)
             history = PredictionHistory(

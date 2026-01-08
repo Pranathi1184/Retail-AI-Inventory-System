@@ -285,66 +285,78 @@ class AdvancedRetailPredictor:
         }
     
     def calculate_reorder_recommendation(self, input_data, demand_forecast):
-        """Calculate reorder recommendations"""
-        current_inventory = input_data.get('Inventory Level', 100)
-        immediate_demand = demand_forecast
-        
-        # Calculate days of supply
-        days_of_supply = current_inventory / immediate_demand if immediate_demand > 0 else 999
-        
-        # Calculate reorder point (7 days of demand + safety stock)
+
+        current_inventory = max(0, input_data.get("Inventory Level", 100))
+        immediate_demand = max(0.1, demand_forecast)  # prevent divide-by-zero
+
+        # Days of supply
+        days_of_supply = current_inventory / immediate_demand
+
+        # Lead time
         lead_time_days = 7
-        safety_stock_days = 3
-        reorder_point = immediate_demand * (lead_time_days + safety_stock_days)
-        
-        # Calculate EOQ (simplified)
+
+        # ===============================
+        # INDUSTRY-GRADE REORDER LOGIC
+        # ===============================
+        service_level_z = 1.65  # 95% service level
+        demand_std = immediate_demand * 0.25
+
+        safety_stock = service_level_z * demand_std * np.sqrt(lead_time_days)
+        reorder_point = (immediate_demand * lead_time_days) + safety_stock
+
+        # EOQ calculation
         annual_demand = immediate_demand * 365
         ordering_cost = 50
         holding_cost_rate = 0.25
-        unit_cost = input_data.get('Price', 30)
+        unit_cost = input_data.get("Price", 30)
         holding_cost_per_unit = unit_cost * holding_cost_rate
-        
+
         if holding_cost_per_unit > 0:
             eoq = np.sqrt((2 * annual_demand * ordering_cost) / holding_cost_per_unit)
         else:
             eoq = immediate_demand * 30
-        
-        # Determine urgency
+
+        # Urgency
         if current_inventory <= immediate_demand * lead_time_days:
             urgency = "HIGH"
             action = "IMMEDIATE_REORDER"
-            reasoning = f"Current inventory ({current_inventory}) below lead time demand ({immediate_demand * lead_time_days:.0f})"
-        elif days_of_supply <= lead_time_days + safety_stock_days:
+            reasoning = f"Inventory below lead-time demand"
+        elif days_of_supply <= lead_time_days + 3:
             urgency = "MEDIUM"
             action = "SCHEDULE_REORDER"
-            reasoning = f"Low days of supply ({days_of_supply:.1f} days)"
+            reasoning = f"Low days of supply ({days_of_supply:.1f})"
         else:
             urgency = "LOW"
             action = "MONITOR"
-            reasoning = f"Sufficient inventory ({days_of_supply:.1f} days supply)"
-        
-        # Calculate recommended order quantity
-        recommended_quantity = max(0, eoq - current_inventory) if urgency in ['HIGH', 'MEDIUM'] else 0
-        
-        # Stockout risk assessment
-        if days_of_supply < lead_time_days:
-            stockout_risk = f"High risk - Stockout expected in {days_of_supply:.0f} days"
-        elif days_of_supply < lead_time_days + safety_stock_days:
-            stockout_risk = "Medium risk - Monitor closely"
+            reasoning = f"Sufficient inventory ({days_of_supply:.1f})"
+
+        # Recommended order quantity
+        if urgency in ["HIGH", "MEDIUM"]:
+            target_stock_level = reorder_point + eoq
+            recommended_quantity = max(0, target_stock_level - current_inventory)
         else:
-            stockout_risk = "Low risk - Sufficient inventory"
-        
+            recommended_quantity = 0
+
+        # Stockout risk
+        if days_of_supply < lead_time_days:
+            stockout_risk = f"High risk - stockout in {days_of_supply:.0f} days"
+        elif days_of_supply < lead_time_days + 3:
+            stockout_risk = "Medium risk - monitor closely"
+        else:
+            stockout_risk = "Low risk - sufficient inventory"
+
         return {
-            'current_inventory': current_inventory,
-            'days_of_supply': round(days_of_supply, 1),
-            'reorder_point': round(reorder_point, 0),
-            'lead_time_demand': round(immediate_demand * lead_time_days, 0),
-            'recommended_order_quantity': round(recommended_quantity, 0),
-            'reorder_urgency': urgency,
-            'reorder_action': action,
-            'reasoning': reasoning,
-            'stockout_risk': stockout_risk
+            "current_inventory": current_inventory,
+            "days_of_supply": round(days_of_supply, 1),
+            "reorder_point": round(reorder_point, 0),
+            "safety_stock": round(safety_stock, 0),
+            "recommended_order_quantity": round(recommended_quantity, 0),
+            "reorder_urgency": urgency,
+            "reorder_action": action,
+            "reasoning": reasoning,
+            "stockout_risk": stockout_risk
         }
+
     
     def generate_dummy_forecast(self, base_demand, days=30):
         """Generate realistic dummy forecast data"""
@@ -547,6 +559,30 @@ class AdvancedRetailPredictor:
         score += 15  # Base confidence
         
         return min(100, max(0, round(score)))
+
+    def normalize_bulk_input(self, raw_input):
+        """
+        Normalize CSV inputs to ensure safe defaults for bulk prediction
+        """
+
+        def safe(value, default):
+            if value is None or (isinstance(value, float) and np.isnan(value)):
+                return default
+            return value
+
+        return {
+            "Store ID": safe(raw_input.get("Store ID"), "UNKNOWN"),
+            "Product ID": safe(raw_input.get("Product ID"), "UNKNOWN"),
+            "Category": safe(raw_input.get("Category"), "General"),
+            "Price": float(safe(raw_input.get("Price"), 50)),
+            "Inventory Level": int(safe(raw_input.get("Inventory Level"), 100)),
+            "Competitor Pricing": float(safe(raw_input.get("Competitor Pricing"), safe(raw_input.get("Price"), 50))),
+            "Holiday/Promotion": int(safe(raw_input.get("Holiday/Promotion"), 0)),
+            "Season": safe(raw_input.get("Season"), "Normal"),
+            "Units Sold": int(safe(raw_input.get("Units Sold"), 0)),
+            "Discount": float(safe(raw_input.get("Discount"), 0))
+        }
+
     
     def generate_error_report(self, input_data, error_message):
         """Generate a basic report when analysis fails"""

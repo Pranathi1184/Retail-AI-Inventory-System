@@ -1,5 +1,7 @@
-store_id,product_id,category,price,inventory_level,competitor_price,promotion,season
-S001,P001,Electronics,499.99,120,480.00,1,Winter
-S001,P002,Groceries,79.50,300,75.00,0,Summer
-S002,P003,Clothing,1299.00,45,1350.00,1,Monsoon
-S002,P004,Footwear,899.00,80,920.00,0,Winter
+store_id,product_id,category,price,inventory_level,units_sold,units_ordered,discount,competitor_price,promotion,season,weather,region
+S001,P001,Electronics,499.99,120,18,100,10,480,1,Winter,Cold,North
+S001,P002,Groceries,79.50,300,35,250,5,75,0,Summer,Hot,South
+S002,P003,Clothing,1299.00,45,12,80,15,1350,1,Monsoon,Rainy,West
+S002,P004,Footwear,899.00,80,22,150,8,920,0,Winter,Cold,East
+S003,P005,Home Appliances,15999.00,25,6,60,12,15500,1,Festival,Cold,North
+S003,P006,Toys,499.00,200,40,300,5,520,0,Holiday,Mild,South
