@@ -13,6 +13,26 @@ The project integrates:
 - CSV-based bulk predictions
 - Interactive dashboard and analysis pages
 
+# 🌐 Live Deployment
+
+The application is deployed on cloud platforms for demonstration, evaluation, and academic review.
+
+\- \*\*Live Application (Render):\*\*  
+  👉 https://retail-ai-inventory-system.onrender.com
+
+\- \*\*Alternative Deployment (Railway):\*\*  
+  👉 https://retail-ai-inventory-system.up.railway.app
+
+\> ⚠️ Note: Free-tier deployments may take a few seconds to wake up on first load.
+
+\#\# Demo Login Credentials
+
+\- Username: demo  
+\- Password: demo123
+
+\- Live deployment validates real-time prediction, bulk CSV processing, and database persistence.
+
+
 ## 🎯 Objectives
 
 - Forecast short-term and 30-day product demand
@@ -355,5 +375,4 @@ GitHub: https://github.com/Pranathi1184
 ## 📄 License
 
 This project is intended for academic and educational use only.
-
 
