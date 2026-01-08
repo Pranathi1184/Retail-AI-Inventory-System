@@ -65,14 +65,15 @@
             <div class="mt-4">
                 <h4 class="font-semibold mb-2">Next 7 Days Forecast</h4>
                 <div class="space-y-2">
-                    {% for date, forecast in report.demand_forecast.daily_forecasts.items() %}
-                    {% if loop.index <= 7 %}
-                    <div class="flex justify-between items-center py-2 border-b">
-                        <span class="text-gray-600">{{ date }}</span>
-                        <span class="font-semibold">{{ "%.0f"|format(forecast) }} units</span>
-                    </div>
-                    {% endif %}
-                    {% endfor %}
+                    {% for f in report.demand_forecast.daily_forecasts %}
+    {% if loop.index <= 7 %}
+    <div class="flex justify-between items-center py-2 border-b">
+        <span class="text-gray-600">{{ f.date }}</span>
+        <span class="font-semibold">{{ "%.0f"|format(f.demand) }} units</span>
+    </div>
+    {% endif %}
+{% endfor %}
+
                 </div>
             </div>
         </div>

@@ -416,13 +416,36 @@ def prediction():
 def results():
     if 'user_id' not in session:
         return redirect(url_for('login'))
-    
+
     report = session.get('last_prediction')
     if not report:
         flash('No prediction results found!', 'error')
         return redirect(url_for('prediction'))
-    
+
+    # 🔧 FIX: normalize daily_forecasts
+    daily_forecasts = report["demand_forecast"]["daily_forecasts"]
+
+    # If stored as dict → convert to list
+    if isinstance(daily_forecasts, dict):
+        normalized = []
+        prev = None
+
+        for date, value in daily_forecasts.items():
+            trend = "Stable" if prev is None else (
+                "Up" if value > prev else "Down" if value < prev else "Stable"
+            )
+
+            normalized.append({
+                "date": date,
+                "demand": value,
+                "trend": trend
+            })
+            prev = value
+
+        report["demand_forecast"]["daily_forecasts"] = normalized
+
     return render_template('results.html', report=report)
+
 
 @app.route('/analysis/<int:prediction_id>')
 def analysis(prediction_id):
@@ -624,7 +647,7 @@ def bulk_prediction():
 
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     with app.app_context():
         db.create_all()
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True)
